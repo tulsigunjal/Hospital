@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MedCore | Modern Hospital Management System</title>
+    <style>
+        :root {
+            --primary-blue: #0056b3;
+            --secondary-blue: #e7f1ff;
+            --accent-blue: #007bff;
+            --dark-blue: #003366;
+            --text-gray: #555;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.25rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-links li a:hover, .nav-links li a.active {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        /* Sections Container */
+        .container {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 1rem;
+            min-height: 85dvh;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--secondary-blue);
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+        }
+
+        h1 { color: var(--dark-blue); }
+
+        /* Grid System */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        /* Form Controls */
+        .btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+            display: inline-block;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .btn { width: auto; }
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        /* Portal Layout */
+        .portal-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .portal-container { grid-template-columns: 260px 1fr; }
+        }
+
+        .sidebar {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li {
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 0.2rem;
+        }
+
+        .menu-list li:hover { background: var(--secondary-blue); color: var(--primary-blue); }
+        .menu-list li.active { background: var(--primary-blue); color: white; }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td { padding: 1rem; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #f4f7f9; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 767px) {
+            nav { flex-direction: column; gap: 0.8rem; }
+            .nav-links { font-size: 0.85rem; width: 100%; justify-content: center; overflow-x: auto; }
+            .hero { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <div class="logo" onclick="navigateTo('home')">MedCore</div>
+        <ul class="nav-links">
+            <li><a onclick="navigateTo('home')" class="nav-item" id="link-home">Home</a></li>
+            <li><a onclick="navigateTo('doctors')" class="nav-item" id="link-doctors">Doctors</a></li>
+            <li><a onclick="navigateTo('appointments')" class="nav-item" id="link-appointments">Appointments</a></li>
+            <li><a onclick="navigateTo('services')" class="nav-item" id="link-services">Services</a></li>
+            <li><a onclick="navigateTo('portal')" class="nav-item" id="link-portal">Portal</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <h1>Healthcare at Your Fingertips</h1>
+            <p>Access specialized medical care, manage appointments, and view your health records seamlessly.</p>
+            <button class="btn" onclick="navigateTo('appointments')">Book Now</button>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>Cardiology</h3>
+                <p>Advanced heart health screening and specialized treatments.</p>
+            </div>
+            <div class="card">
+                <h3>Neurology</h3>
+                <p>Expert care for brain and nervous system disorders.</p>
+            </div>
+            <div class="card">
+                <h3>Pediatrics</h3>
+                <p>Compassionate healthcare tailored for infants and children.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctors Page -->
+    <div id="doctors" class="page">
+        <h2>Our Specialist Team</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Dr. Alan Grant</h3>
+                <p><strong>Senior Cardiologist</strong></p>
+                <p>MD, FACC - 15+ years experience.</p>
+                <button class="btn" onclick="navigateTo('appointments')">Request Appointment</button>
+            </div>
+            <div class="card">
+                <h3>Dr. Sarah Connor</h3>
+                <p><strong>Chief Pediatrician</strong></p>
+                <p>Specialist in Child Development.</p>
+                <button class="btn" onclick="navigateTo('appointments')">Request Appointment</button>
+            </div>
+            <div class="card">
+                <h3>Dr. Ian Malcolm</h3>
+                <p><strong>Neurosurgeon</strong></p>
+                <p>Expert in minimally invasive spinal surgery.</p>
+                <button class="btn" onclick="navigateTo('appointments')">Request Appointment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointments Page -->
+    <div id="appointments" class="page">
+        <h2>Schedule an Appointment</h2>
+        <form onsubmit="handleBooking(event)">
+            <div class="form-group">
+                <label>Patient Name</label>
+                <input type="text" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label>Department</label>
+                <select required>
+                    <option value="">Choose Department</option>
+                    <option>Cardiology</option>
+                    <option>Neurology</option>
+                    <option>Pediatrics</option>
+                    <option>General Medicine</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" required>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea rows="3" placeholder="Brief reason for visit"></textarea>
+            </div>
+            <button type="submit" class="btn">Confirm Booking</button>
+        </form>
+    </div>
+
+    <!-- Services Page -->
+    <div id="services" class="page">
+        <h2>Hospital Services</h2>
+        <div class="grid">
+            <div class="card">
+                <h4>24/7 Emergency</h4>
+                <p>Immediate response for critical health emergencies.</p>
+            </div>
+            <div class="card">
+                <h4>Diagnostic Lab</h4>
+                <p>Modern equipment for blood tests, X-rays, and MRI.</p>
+            </div>
+            <div class="card">
+                <h4>Pharmacy</h4>
+                <p>Full-service pharmacy located on the main floor.</p>
+            </div>
+            <div class="card">
+                <h4>In-Patient Care</h4>
+                <p>Comfortable rooms and round-the-clock nursing care.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portal Page -->
+    <div id="portal" class="page">
+        <div id="login-screen">
+            <h2>Patient Login</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Patient ID</label>
+                    <input type="text" placeholder="PAT-001" required value="PAT-001">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" required value="12345">
+                </div>
+                <button type="submit" class="btn">Login to Portal</button>
+            </form>
+        </div>
+
+        <div id="portal-dashboard" style="display: none;">
+            <div class="portal-container">
+                <aside class="sidebar">
+                    <h4>Welcome, John!</h4>
+                    <ul class="menu-list">
+                        <li onclick="switchPortalTab('p-appointments')" class="portal-link active">My Appointments</li>
+                        <li onclick="switchPortalTab('p-reports')" class="portal-link">Medical Reports</li>
+                        <li onclick="switchPortalTab('p-prescriptions')" class="portal-link">Prescriptions</li>
+                        <li onclick="logout()" style="color: red; margin-top: 2rem;">Logout</li>
+                    </ul>
+                </aside>
+                <main>
+                    <div id="p-appointments" class="portal-tab">
+                        <h3>Upcoming Appointments</h3>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr><th>Date</th><th>Doctor</th><th>Type</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Oct 20, 2026</td><td>Dr. Alan Grant</td><td>Consultation</td><td>Confirmed</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="p-reports" class="portal-tab" style="display: none;">
+                        <h3>Medical Reports</h3>
+                        <div class="card">Blood Test Results - 10/10/2026 <a href="#">Download</a></div>
+                    </div>
+                    <div id="p-prescriptions" class="portal-tab" style="display: none;">
+                        <h3>Current Prescriptions</h3>
+                        <div class="card">Lisinopril 10mg - Daily</div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function navigateTo(pageId) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+        
+        // Show target page
+        const target = document.getElementById(pageId);
+        if(target) target.classList.add('active');
+
+        // Update Nav UI
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.classList.remove('active');
+        });
+        document.getElementById('link-' + pageId).classList.add('active');
+
+        // Reset scroll
+        window.scrollTo(0, 0);
+    }
+
+    function handleBooking(e) {
+        e.preventDefault();
+        alert('Booking successful! We have sent a confirmation to your email.');
+        e.target.reset();
+        navigateTo('home');
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('portal-dashboard').style.display = 'block';
+    }
+
+    function logout() {
+        document.getElementById('login-screen').style.display = 'block';
+        document.getElementById('portal-dashboard').style.display = 'none';
+    }
+
+    function switchPortalTab(tabId) {
+        document.querySelectorAll('.portal-tab').forEach(t => t.style.display = 'none');
+        document.getElementById(tabId).style.display = 'block';
+        
+        document.querySelectorAll('.portal-link').forEach(l => l.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    // Set initial active state
+    document.getElementById('link-home').classList.add('active');
+</script>
+
+</body>
+</html>
